@@ -1,0 +1,12 @@
+create table "user"
+        (
+        tag_id int
+        constraint user_pk
+        primary key,
+        username varchar(20),
+        name varchar(35),
+        firstname varchar(35),
+        budget decimal(10,2)
+        birthday date
+        );
+
