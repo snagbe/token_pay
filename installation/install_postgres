@@ -1,11 +1,27 @@
+#Installation vom PostgreSQL Server
+sudo apt install postgresql
+- Version prüfen:
+psql --version
+- Status des Servers testen:
+sudo systemctl status postgresql
+- Passwort für den postgres User setzen
+sudo passwd postgres
+
+
+- einloggen als postgres User
+su - postgres
+- Erstellung eines eigenen Users
+createuser --interactive --pwprompt
+
+
 #Aktivierung der Remote Berechtigung für den PostgreSQL Server
-befehl:
+- Befehl:
 root@raspberrypi:/etc/postgresql/11/main# nano postgresql.conf
-wechseln:
+- Wechseln:
 listen_addresses = 'localhost' to listen_addresses = '*'
 
-befehl:
+- Befehl:
 root@raspberrypi:/etc/postgresql/11/main# nano pg_hba.conf
-wechseln
+- Wechseln:
 host all all 203.0.113.2/32 md5 to host all all 0.0.0.0/0 md5
 Zwei Mal
