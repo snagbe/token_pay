@@ -1,0 +1,11 @@
+#Aktivierung der Remote Berechtigung für den PostgreSQL Server
+befehl:
+root@raspberrypi:/etc/postgresql/11/main# nano postgresql.conf
+wechseln:
+listen_addresses = 'localhost' to listen_addresses = '*'
+
+befehl:
+root@raspberrypi:/etc/postgresql/11/main# nano pg_hba.conf
+wechseln
+host all all 203.0.113.2/32 md5 to host all all 0.0.0.0/0 md5
+Zwei Mal
