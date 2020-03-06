@@ -67,7 +67,7 @@ try:
             cur.execute("SELECT * FROM \"user\" where tag_id = %s", [tid])
             if cur.rowcount!=0:
 
-                GPIO.output(14, GPIO.HIGH)
+                
             
                 tag_id, username, name, firstname, budget, birthday = cur.fetchone()
             
@@ -79,15 +79,30 @@ try:
                 #          t, font=font, fill=255)
         
                 #draw.text((10,16),t,font=font,fill=255)
-                oled.text(t,0,0,1)
-                oled.text(str(tid),0,16,1)
-                oled.text(name,0,32,1)
-                # Display image
-                #oled.image(image)
+                if(budget >= 1.00){
+                    budget = budget - 1
+                    
+                    #Display Text
+                    oled.text(t,0,0,1)
+                    oled.text(str(tid),0,16,1)
+                    oled.text(firstname,0,32,1)
+                    oled.text(name,0,48,1)
+                    oled.text(Budget,0,64,1)
+
+                    GPIO.output(14, GPIO.HIGH)
+
+                }else{
+                    oled.text("Sie besitzen zu",0,0,1)
+                    oled.text("wenig Budget",0,16,1)
+                    oled.text(Budget,0,32,1)
+                }
+
+                
                 oled.show()
 
                 time.sleep(3)
                 GPIO.output(14, GPIO.LOW)
+                
                 time.sleep(7)
                 
                 i = 0
