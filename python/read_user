@@ -91,6 +91,7 @@ try:
                     GPIO.output(14, GPIO.HIGH)
 
                 }else{
+                    
                     oled.text("Sie besitzen zu",0,0,1)
                     oled.text("wenig Budget",0,16,1)
                     oled.text(budget,0,32,1)
