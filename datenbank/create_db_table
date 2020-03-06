@@ -12,3 +12,6 @@ create table "user"
         birthday date
         );
 
+//
+INSERT INTO "public"."user" ("tag_id", "username", "name", "firstname", "budget", "birthday") VALUES (798488828269, 'user100', 'Hammer', 'Bruno', 100, '1982-03-17')
+[2020-03-05 20:27:24] 1 row affected in 27 ms
