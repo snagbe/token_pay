@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+
+# Import
+import board
+import digitalio
+import time
+from PIL import Image, ImageDraw, ImageFont
+import adafruit_ssd1306
+from mfrc522 import SimpleMFRC522
+import RPi.GPIO as GPIO
+import psycopg2
+
+reader = SimpleMFRC522()
+
+GPIO.setup(14, GPIO.OUT, initial=GPIO.LOW)
+
+# Change these
+# to the right size for your display!
+WIDTH = 128
+HEIGHT = 64     # Change to 64 if needed
+         
+# Use for I2C.
+i2c = board.I2C()
+oled = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3c)
+
+conn = psycopg2.connect(dbname="dbbank", user="teko", password="teko123",host="127.0.0.1")
+
+cur = conn.cursor()
+
+#cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
+
+# Main
+try:
+        i = 0
+        while True:
+            GPIO.output(14, GPIO.LOW)
+
+            # Clear display.
+            oled.fill(0)
+            oled.show()
+         
+            # Create blank image for drawing.
+            # Make sure to create image with mode '1' for 1-bit color.
+            #image = Image.new('1', (oled.width, oled.height))
+         
+            # Get drawing object to draw on image.
+            #draw = ImageDraw.Draw(image)
+         
+            # Draw a white background
+            #draw.rectangle((0, 0, oled.width, oled.height), outline=255, fill=255)
+         
+            # Draw a smaller inner rectangle
+            #draw.rectangle((BORDER, BORDER, oled.width - BORDER - 1, oled.height - BORDER - 1),
+            #               outline=0, fill=0)
+         
+            # Load default font.
+            #font = ImageFont.load_default()
+         
+            #oled.text("ready",0,0,0)
+            #oled.show()
+
+            tid, t = reader.read()
+            print(tid)
+            print(t)
+        
+            
+            cur.execute("SELECT * FROM \"user\" where tag_id = %s", [tid])
+            if cur.rowcount!=0:
+
+                GPIO.output(14, GPIO.HIGH)
+            
+                tag_id, username, name, firstname, budget, birthday = cur.fetchone()
+            
+                # Draw Some Text
+                #text = "Hello World!"
+                #text = (t)
+                #(font_width, font_height) = font.getsize(t)
+                #draw.text((oled.width//2 - font_width//2, oled.height//2 - font_height//2),
+                #          t, font=font, fill=255)
+        
+                #draw.text((10,16),t,font=font,fill=255)
+                oled.text(t,0,0,1)
+                oled.text(str(tid),0,16,1)
+                oled.text(name,0,32,1)
+                # Display image
+                #oled.image(image)
+                oled.show()
+
+                time.sleep(3)
+                GPIO.output(14, GPIO.LOW)
+                time.sleep(7)
+                
+                i = 0
+            else:
+                if i == 2:
+                    oled.text("Eingabe 30 Sekunden",0,0,1)
+                    oled.text("gesperrt",0,16,1)
+                    oled.show()
+                    time.sleep(10)
+                else:
+                    oled.text("Fehler",0,0,1)
+                    oled.show()
+                    time.sleep(10)
+                
+                i+=1
+               
+finally:
+        
+        
+        #Close communication with the database
+        cur.close()
+        conn.close()
+        GPIO.cleanup()
