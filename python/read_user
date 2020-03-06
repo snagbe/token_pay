@@ -84,17 +84,16 @@ try:
                     
                     #Display Text
                     oled.text(t,0,0,1)
-                    oled.text(str(tid),0,16,1)
                     oled.text(firstname,0,32,1)
                     oled.text(name,0,48,1)
-                    oled.text(Budget,0,64,1)
+                    oled.text(budget,0,64,1)
 
                     GPIO.output(14, GPIO.HIGH)
 
                 }else{
                     oled.text("Sie besitzen zu",0,0,1)
                     oled.text("wenig Budget",0,16,1)
-                    oled.text(Budget,0,32,1)
+                    oled.text(budget,0,32,1)
                 }
 
                 
